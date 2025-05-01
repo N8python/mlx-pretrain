@@ -522,9 +522,9 @@ class Trainer:
             json.dump(metadata, f, indent=2)
             
         # Save the config used to the run directory
-        """with open(self.run_dir / 'config.yaml', 'w') as f:
+        with open(self.run_dir / 'config.yaml', 'w') as f:
             with open(self.config_path, 'r') as config_file:
-                f.write(config_file.read())"""
+                f.write(config_file.read())
     
     def compute_loss(self, model, inputs: mx.array, targets: mx.array) -> Tuple[mx.array, int]:
         logits = model(inputs)
