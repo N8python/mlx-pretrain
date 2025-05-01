@@ -287,14 +287,15 @@ class DataManager:
             for line in f:
                 d = json.loads(line)
                 text = d["text"]
-                chunk_size = self.config.preprocessing['max_context_size']
+                """chunk_size = self.config.preprocessing['max_context_size']
                 overlap = self.config.preprocessing.get('chunk_overlap', 0)
                 
                 # Handle overlapping chunks if specified
                 stride = chunk_size - overlap
                 for i in range(0, len(text), stride):
                     chunk_text = text[i : i + chunk_size]
-                    docs_list.append(chunk_text)
+                    docs_list.append(chunk_text)"""
+                docs_list.append(text)
     
     def generate_batch(self, step: int) -> mx.array:
         """Generate a training batch."""
@@ -521,15 +522,14 @@ class Trainer:
             json.dump(metadata, f, indent=2)
             
         # Save the config used to the run directory
-        with open(self.run_dir / 'config.yaml', 'w') as f:
+        """with open(self.run_dir / 'config.yaml', 'w') as f:
             with open(self.config_path, 'r') as config_file:
-                f.write(config_file.read())
+                f.write(config_file.read())"""
     
     def compute_loss(self, model, inputs: mx.array, targets: mx.array) -> Tuple[mx.array, int]:
         logits = model(inputs)
         logits = logits.astype(mx.float32)
         loss = nn.losses.cross_entropy(logits, targets)
-        
         # Mask padding tokens
         pad_mask = (targets != self.tokenizer.PAD_TOKEN)
         loss = loss * pad_mask
